@@ -50,14 +50,24 @@ playpause.addEventListener('click', () => {
         playpause.classList.add('fa-play-circle-o');
         playpause.classList.remove('fa-pause-circle-o');
         gif.style.opacity = 0;
+        songitems_pause();
     }
 })
 
-// incrementing progressbar using timeupdate event.
+// incrementing progressbar using timeupdate event and performing checking tasks.
 audioele.addEventListener('timeupdate', () => {
     const progress = parseInt(audioele.currentTime / audioele.duration * 100)
     progressbar.value = progress;
+    document.getElementById('current-time').textContent = formatTime(audioele.currentTime);
+    document.getElementById('duration').textContent = formatTime(audioele.duration);
+    checkEnd();
 })
+
+function formatTime(timeInSeconds) {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${String(minutes).padStart(1, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
 // controling music through progressbar using change event.
 progressbar.addEventListener('change', () => {
@@ -65,11 +75,30 @@ progressbar.addEventListener('change', () => {
 })
 
 // function to change the logo of songplay to manually play a song
-const controls = () => {
+const songitems_pause = () => {
     Array.from(songplay).forEach((ele) => {
-        ele.classList.add('fa-play-circle-o')
-        ele.classList.remove('fa-pause-circle-o')
+        if (ele.classList.contains('fa-pause-circle-o')) {
+            ele.classList.add('fa-play-circle-o')
+            ele.classList.remove('fa-pause-circle-o')
+        }
     })
+}
+
+const songitems_play = (inx) => {
+    let a = Array.from(songplay)
+    console.log(typeof (a));
+    // if (ele.classList.contains('fa-play-circle-o')) {
+    //     ele.classList.add('fa-pause-circle-o')
+    //     ele.classList.remove('fa-play-circle-o')
+    // }
+}
+
+const checkEnd = () => {
+    if (audioele.ended) {
+        playpause.classList.add('fa-play-circle-o');
+        playpause.classList.remove('fa-pause-circle-o');
+        gif.style.opacity = 0;
+    }
 }
 // function to update song name when song change
 const namechanger = (inx) => {
@@ -84,15 +113,15 @@ Array.from(songplay).forEach(ele => {
     j += 1;
     ele.addEventListener('click', (e) => {
         // condition to check for pause icon, audio is playing or not .
-        if(ele.classList.contains('fa-pause-circle-o') && !audioele.paused) {
-            controls();
+        if (ele.classList.contains('fa-pause-circle-o') && !audioele.paused) {
+            songitems_pause();
             audioele.pause();
             gif.style.opacity = 0;
             playpause.classList.add('fa-play-circle-o')
             playpause.classList.remove('fa-pause-circle-o')
         }
         else {
-            controls();
+            songitems_pause();
             // convert into int because id is in string
             index = parseInt(e.target.id);
             ele.classList.add('fa-pause-circle-o')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
     <nav>
         <ul>
@@ -22,9 +24,13 @@
         </div>
         <div class="songBanner"></div>
     </div>
-    
+
     <div class="bottom">
-        <input type="range" min="0" max="100" value="0" id="progressBar">
+        <div>
+            <span id="current-time">0:00</span>
+            <input type="range" min="0" max="100" value="0" id="progressBar">
+            <span id="duration">0:00</span>
+        </div>
         <div class="songinfo">
             <img src="playing.gif" width="42px" alt="song on">
             <span id="songName"></span>
@@ -40,4 +46,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
