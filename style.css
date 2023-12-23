@@ -1,0 +1,141 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: antiquewhite;
+}
+/* nav bar start */
+nav{
+    width: 100%;
+    height: 50px;
+    background-color: black;
+    color: white;
+}
+nav ul{
+    display: flex;
+    align-items: center;
+}
+
+nav ul li{
+    padding: 0 10px;
+    list-style-type: none;
+}
+.banner{
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+
+}
+.banner img{
+    height: 40px;
+}
+/* nav bar end */
+
+/* container starts */
+.container{
+    min-height: 73vh;
+    width: 70%;
+    border-radius: 12px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: black;
+    display: flex;
+    color: white;
+    background-image: url('bg.jpg');
+    background-size: cover;
+}
+
+.songList{
+    width: 500px;
+    height: 400px;
+    overflow: scroll;
+}
+
+.songList::-webkit-scrollbar{
+    display: none;
+}
+
+.songList h1{
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.songItem{
+    display: flex;
+    margin:12px 10px 0;
+    padding: 5px;
+    background-color: white;
+    color: black;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    border-radius: 50px;
+    justify-content:space-between;
+}
+.songItem img{
+    width: 30px;
+    border-radius: 50%;
+}
+
+.songItem span{
+    padding:0 10px;
+}
+
+.spanplay i{
+    cursor: pointer;
+}
+/* container end */
+
+/* bottom starts */
+.bottom{
+    position: sticky;
+    bottom: 0;
+    background-color: black;
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    color: white;
+    flex-direction: column;
+}
+
+#progressBar{
+    width: 80vw;
+    margin-top:20px;
+    cursor: pointer;
+}
+
+.icons{
+    margin:10px 0;
+    cursor: pointer;
+}
+
+.icons i{
+    margin:0 10px;
+}
+
+.songinfo{
+    position: absolute;
+    color: white;
+    left: 10vw;
+    font-size: 1.2rem;
+}
+
+.songinfo img{
+    opacity: 0;
+    transition: 0.3s ease-in ;
+}
+
+.shuffle{
+    color: white;
+    background-color: white;
+    position: absolute;
+    right: 10px;
+}
+
+
+/* bottom ends */
