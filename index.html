@@ -7,6 +7,7 @@
     <title>Spotify clone</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="logo.png">
 </head>
 
 <body>
@@ -26,22 +27,25 @@
     </div>
 
     <div class="bottom">
-        <div>
+        <div class="songcontrol">
             <span id="current-time">0:00</span>
-            <input type="range" min="0" max="100" value="0" id="progressBar">
+            <div id="progressBar">
+                <div id="progress_meter"></div>
+            </div>
             <span id="duration">0:00</span>
         </div>
         <div class="songinfo">
             <img src="playing.gif" width="42px" alt="song on">
             <span id="songName"></span>
+            <input type="range" min="0" max="100" value="100" id="volume">
         </div>
         <div class="icons">
             <i class="fa fa-2x fa-step-backward" id="previous"></i>
             <i class="fa fa-2x fa-play-circle-o" id="playpause"></i>
             <i class="fa fa-2x fa-step-forward" id="next"></i>
         </div>
-        <div class="shuffle">
-        </div>
+        <div class="shuffle"></div>
+        
     </div>
 
     <script src="script.js"></script>

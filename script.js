@@ -8,7 +8,8 @@ const song_list = document.querySelector('.songList');
 const songplay = document.getElementsByClassName('songplaypause');
 const songinfo = document.getElementsByClassName('songinfo');
 const songName = document.getElementById('songName');
-
+const volume = document.getElementById('volume');
+const progressmeter = document.getElementById('progress_meter');
 // creating a array of object for songs
 let songs = [
     { songname: "it's always Blue", coverPath: 'covers/1.jpg', filePath: 'songs/1.mp3' },
@@ -21,17 +22,22 @@ let songs = [
 ]
 
 // creating element for songs array dynamically 
+// audioele.src = `songs/${index}.mp3`;
 for (let i in songs) {
+    // audioele.src = `songs/${i + 1}.mp3`;
     const song_item = document.createElement('div');
     song_item.classList.add('songItem');
     song_list.appendChild(song_item);
+    // audioele.addEventListener('loadedmetadata',()=>{
     const inserthtml = `
-            <img src="${songs[i].coverPath}" alt="${i}">
-            <span>${songs[i].songname}</span>
-            <span class="spanplay"><span></span><i class="fa fa-play-circle-o songplaypause"></i></span>
-            `;
-    song_item.insertAdjacentHTML('afterbegin', inserthtml);
-}
+        <img src="${songs[i].coverPath}" alt="${i}">
+        <span>${songs[i].songname}</span>
+        <span class="spanplay"><span></span><i class="fa fa-play-circle-o songplaypause"></i></span>
+        `;
+        song_item.insertAdjacentHTML('afterbegin', inserthtml);
+    // })
+    // continue;
+    }
 
 
 // declare a function for changing play pause and updating animation
@@ -53,26 +59,33 @@ playpause.addEventListener('click', () => {
         songitems_pause();
     }
 })
-
 // incrementing progressbar using timeupdate event and performing checking tasks.
+let progress;
 audioele.addEventListener('timeupdate', () => {
-    const progress = parseInt(audioele.currentTime / audioele.duration * 100)
-    progressbar.value = progress;
+    progress = parseFloat(audioele.currentTime / audioele.duration * 100);
+    progressmeter.style.width = progress+"%";
     document.getElementById('current-time').textContent = formatTime(audioele.currentTime);
     document.getElementById('duration').textContent = formatTime(audioele.duration);
     checkEnd();
 })
 
-function formatTime(timeInSeconds) {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-    return `${String(minutes).padStart(1, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-// controling music through progressbar using change event.
-progressbar.addEventListener('change', () => {
-    audioele.currentTime = (progressbar.value * audioele.duration / 100);
+// changing music time through progressbar using click event.
+progressbar.addEventListener('click', (e) => {
+    let progressbarWidth =  progressbar.getBoundingClientRect().width;
+    let clientPosition = e.clientX - progressbar.offsetLeft;
+    let percentage = clientPosition /progressbarWidth *100;
+    progressmeter.style.width = percentage+"%";
+    audioele.currentTime = audioele.duration * (percentage/ 100);
 })
+
+// volume
+volume.addEventListener('click',()=>{
+    audioele.volume = volume.value / 100
+})
+volume.addEventListener('mousemove',()=>{
+    audioele.volume = volume.value / 100
+})
+
 
 // function to change the logo of songplay to manually play a song
 const songitems_pause = () => {
@@ -82,6 +95,12 @@ const songitems_pause = () => {
             ele.classList.remove('fa-pause-circle-o')
         }
     })
+}
+
+function formatTime(timeInSeconds) {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${String(minutes).padStart(1, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 const songitems_play = (inx) => {
