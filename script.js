@@ -10,6 +10,8 @@ const songinfo = document.getElementsByClassName('songinfo');
 const songName = document.getElementById('songName');
 const volume = document.getElementById('volume');
 const progressmeter = document.getElementById('progress_meter');
+
+
 // creating a array of object for songs
 let songs = [
     { songname: "it's always Blue", coverPath: 'covers/1.jpg', filePath: 'songs/1.mp3' },
@@ -21,8 +23,9 @@ let songs = [
     { songname: "Sakhiyaan - Salam-e-Ishq", coverPath: 'covers/7.jpg', filePath: 'songs/7.mp3' }
 ]
 
+
 // creating element for songs array dynamically 
-// audioele.src = `songs/${index}.mp3`;
+// audioele.src = songs[index-1].filePath;
 for (let i in songs) {
     // audioele.src = `songs/${i + 1}.mp3`;
     const song_item = document.createElement('div');
@@ -37,16 +40,25 @@ for (let i in songs) {
         song_item.insertAdjacentHTML('afterbegin', inserthtml);
     // })
     // continue;
-    }
+}
 
 
 // declare a function for changing play pause and updating animation
 playpause.addEventListener('click', () => {
-    if (audioele.paused || audioele.currentTime <= 0) {
-        audioele.src = `songs/${index}.mp3`;
+    if (audioele.paused && audioele.currentTime <= 0) {
+        audioele.src = songs[index-1].filePath;
         audioele.currentTime = 0;
         audioele.play();
         namechanger(index);
+        songitems_play(index);
+        playpause.classList.remove('fa-play-circle-o');
+        playpause.classList.add('fa-pause-circle-o');
+        gif.style.opacity = 1;
+    }
+    else if (audioele.paused && audioele.currentTime !=0){
+        audioele.play();
+        namechanger(index);
+        songitems_play(index);
         playpause.classList.remove('fa-play-circle-o');
         playpause.classList.add('fa-pause-circle-o');
         gif.style.opacity = 1;
@@ -59,14 +71,29 @@ playpause.addEventListener('click', () => {
         songitems_pause();
     }
 })
+
+
 // incrementing progressbar using timeupdate event and performing checking tasks.
-let progress;
 audioele.addEventListener('timeupdate', () => {
-    progress = parseFloat(audioele.currentTime / audioele.duration * 100);
+    let progress = parseFloat(audioele.currentTime / audioele.duration * 100);
     progressmeter.style.width = progress+"%";
     document.getElementById('current-time').textContent = formatTime(audioele.currentTime);
     document.getElementById('duration').textContent = formatTime(audioele.duration);
-    checkEnd();
+    if(audioele.ended && index <songs.length){
+        index+=1;
+        audioele.src = songs[index-1].filePath;
+        audioele.play();
+        namechanger(index);
+        songitems_play(index);
+    }
+    if(audioele.ended){
+        index=songs.length;
+        playpause.classList.add("fa-play-circle-o")
+        playpause.classList.remove("fa-pause-circle-o")
+        gif.style.opacity = 0;
+        songitems_pause();
+
+    }
 })
 
 // changing music time through progressbar using click event.
@@ -78,6 +105,7 @@ progressbar.addEventListener('click', (e) => {
     audioele.currentTime = audioele.duration * (percentage/ 100);
 })
 
+
 // volume
 volume.addEventListener('click',()=>{
     audioele.volume = volume.value / 100
@@ -87,7 +115,7 @@ volume.addEventListener('mousemove',()=>{
 })
 
 
-// function to change the logo of songplay to manually play a song
+// function to change the icon of songplay id while playing a song
 const songitems_pause = () => {
     Array.from(songplay).forEach((ele) => {
         if (ele.classList.contains('fa-pause-circle-o')) {
@@ -97,34 +125,32 @@ const songitems_pause = () => {
     })
 }
 
+// to convert duration into min,secs format
 function formatTime(timeInSeconds) {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${String(minutes).padStart(1, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
+// ....?
 const songitems_play = (inx) => {
-    let a = Array.from(songplay)
-    console.log(typeof (a));
-    // if (ele.classList.contains('fa-play-circle-o')) {
-    //     ele.classList.add('fa-pause-circle-o')
-    //     ele.classList.remove('fa-play-circle-o')
-    // }
+    songitems_pause();
+    let a = Array.from(songplay)[inx-1]
+        if(a.classList.contains('fa-play-circle-o')){
+            a.classList.add('fa-pause-circle-o')
+            a.classList.remove('fa-play-circle-o')
+        }
 }
 
-const checkEnd = () => {
-    if (audioele.ended) {
-        playpause.classList.add('fa-play-circle-o');
-        playpause.classList.remove('fa-pause-circle-o');
-        gif.style.opacity = 0;
-    }
-}
-// function to update song name when song change
+
+//  to update song name when song change
 const namechanger = (inx) => {
     songName.innerHTML = songs[inx - 1].songname;
 }
+namechanger(index);
 
 
+// calling songs when their button is clicked
 let j = 1;
 Array.from(songplay).forEach(ele => {
     // use to set id in songplay class
@@ -145,7 +171,7 @@ Array.from(songplay).forEach(ele => {
             index = parseInt(e.target.id);
             ele.classList.add('fa-pause-circle-o')
             ele.classList.remove('fa-play-circle-o')
-            audioele.src = `songs/${index}.mp3`;
+            audioele.src = songs[index-1].filePath;
             audioele.currentTime = 0;
             audioele.play();
             namechanger(index);
@@ -156,6 +182,7 @@ Array.from(songplay).forEach(ele => {
     })
 })
 
+
 // conditon of click event for next functionality
 document.getElementById('next').addEventListener('click', () => {
     if (index >= songs.length) {
@@ -164,27 +191,30 @@ document.getElementById('next').addEventListener('click', () => {
     else if (index >= 1 && index < songs.length) {
         index = index + 1;
     }
-    audioele.src = `songs/${index}.mp3`;
+    audioele.src = songs[index-1].filePath;
     audioele.currentTime = 0;
     audioele.play();
     namechanger(index);
+    songitems_play(index);
     gif.style.opacity = 1;
     playpause.classList.add('fa-pause-circle-o')
     playpause.classList.remove('fa-play-circle-o')
 })
+
 
 // conditon of click event for previous functionality
 document.getElementById('previous').addEventListener('click', () => {
     if (index <= 1) {
         index = songs.length;
     }
-    else if (index <= 7 && index > 1) {
+    else if (index <= songs.length && index > 1) {
         index -= 1;
     }
-    audioele.src = `songs/${index}.mp3`;
+    audioele.src = songs[index-1].filePath;
     audioele.currentTime = 0;
     audioele.play();
     namechanger(index);
+    songitems_play(index);
     gif.style.opacity = 1;
     playpause.classList.add('fa-pause-circle-o')
     playpause.classList.remove('fa-play-circle-o')

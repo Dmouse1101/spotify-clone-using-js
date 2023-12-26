@@ -147,11 +147,10 @@ nav ul li{
     transition: 0.3s ease-in ;
 }
 
-.shuffle{
-    color: white;
-    background-color: white;
+#shuffle{
     position: absolute;
-    right: 10px;
+    right: 10vw;
+    cursor: pointer;
 }
 
 
