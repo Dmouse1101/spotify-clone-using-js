@@ -23,25 +23,32 @@ let songs = [
     { songname: "Sakhiyaan - Salam-e-Ishq", coverPath: 'covers/7.jpg', filePath: 'songs/7.mp3' }
 ]
 
+const loadsongs = (path)=>{
+    return new Promise((resolve)=>{
+        const tempAudio = new Audio();
+        tempAudio.src = path;
+        tempAudio.addEventListener('loadedmetadata', () => {
+            resolve(tempAudio);
+        });
+    });
+};
 
+const audioPromises = songs.map(song => loadsongs(song.filePath))
 // creating element for songs array dynamically 
-// audioele.src = songs[index-1].filePath;
-for (let i in songs) {
-    // audioele.src = `songs/${i + 1}.mp3`;
-    const song_item = document.createElement('div');
-    song_item.classList.add('songItem');
-    song_list.appendChild(song_item);
-    // audioele.addEventListener('loadedmetadata',()=>{
-    const inserthtml = `
-        <img src="${songs[i].coverPath}" alt="${i}">
-        <span>${songs[i].songname}</span>
-        <span class="spanplay"><span></span><i class="fa fa-play-circle-o songplaypause"></i></span>
+Promise.all(audioPromises).then((audioElement)=>{
+    for (let i in songs) {
+        const song_item = document.createElement('div');
+        song_item.classList.add('songItem');
+        song_list.appendChild(song_item);
+        const inserthtml = `
+            <img src="${songs[i].coverPath}" alt="${i+1}">
+            <span>${songs[i].songname}</span>
+            <span class="spanplay"><span>${formatTime(audioElement[i].duration)}</span><i class="fa fa-play-circle-o songplaypause"></i></span>
         `;
         song_item.insertAdjacentHTML('afterbegin', inserthtml);
-    // })
-    // continue;
-}
-
+    };
+    songplaypause(audioElement);
+});
 
 // declare a function for changing play pause and updating animation
 playpause.addEventListener('click', () => {
@@ -151,6 +158,7 @@ namechanger(index);
 
 
 // calling songs when their button is clicked
+const songplaypause = aud=>{
 let j = 1;
 Array.from(songplay).forEach(ele => {
     // use to set id in songplay class
@@ -158,7 +166,8 @@ Array.from(songplay).forEach(ele => {
     j += 1;
     ele.addEventListener('click', (e) => {
         // condition to check for pause icon, audio is playing or not .
-        if (ele.classList.contains('fa-pause-circle-o') && !audioele.paused) {
+        audioele.pause()
+        if (ele.classList.contains('fa-pause-circle-o') && audioele.played) {
             songitems_pause();
             audioele.pause();
             gif.style.opacity = 0;
@@ -171,7 +180,7 @@ Array.from(songplay).forEach(ele => {
             index = parseInt(e.target.id);
             ele.classList.add('fa-pause-circle-o')
             ele.classList.remove('fa-play-circle-o')
-            audioele.src = songs[index-1].filePath;
+            audioele =aud[index-1];
             audioele.currentTime = 0;
             audioele.play();
             namechanger(index);
@@ -181,7 +190,7 @@ Array.from(songplay).forEach(ele => {
         }
     })
 })
-
+}
 
 // conditon of click event for next functionality
 document.getElementById('next').addEventListener('click', () => {
