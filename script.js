@@ -125,7 +125,12 @@ volume.addEventListener('click', () => {
 volume.addEventListener('mousemove', () => {
     audioele.volume = volume.value / 100
 })
-
+volume.addEventListener('touchstart',()=>{
+    audioele.volume = volume.value / 100
+})
+volume.addEventListener('touchmove',()=>{
+    audioele.volume = volume.value / 100
+})
 
 // function to change the icon of songplay class while playing a song
 const songitems_pause = () => {
