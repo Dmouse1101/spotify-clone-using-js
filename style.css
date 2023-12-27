@@ -37,6 +37,7 @@ nav ul li{
 /* container starts */
 .container{
     min-height: 73vh;
+    max-height: 73vh;
     width: 70%;
     border-radius: 12px;
     margin: 20px auto;
@@ -50,7 +51,6 @@ nav ul li{
 
 .songList{
     width: 500px;
-    height: 400px;
     overflow: scroll;
 }
 
@@ -138,8 +138,14 @@ nav ul li{
 .songinfo{
     position: absolute;
     color: white;
-    left: 10vw;
+    left: 6vw;
     font-size: 1.2rem;
+    clear: both;
+    width: 85%;
+}
+
+#volume{
+    float: right;
 }
 
 .songinfo img{
@@ -153,5 +159,40 @@ nav ul li{
     cursor: pointer;
 }
 
-
 /* bottom ends */
+
+/* responsive layout  */
+
+@media screen and (max-width:1100px) {
+    .songinfo{
+        left: 10vw;
+        clear: both;
+        width: 75%;
+    }
+   #progressBar{
+    width: 70vw;
+   }
+}
+
+@media screen and (max-width:750px){
+    .songList h1{
+        font-size:4vw;
+    }
+    .songinfo{
+        position: relative;
+        left: 0;
+    }
+    .songItem{
+        font-size: 16px;
+    }
+    .spanplay{
+        float: right;
+    }
+}
+
+@media screen and (max-width:500px){
+    .songItem{
+        font-size: 10px;
+        font-weight: 500;
+    }
+}
